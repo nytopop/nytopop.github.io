@@ -45,16 +45,17 @@ Alpine.data("app", function (this: { $persist: (v: any) => any }): App {
   return {
     configModal: false,
 
-    apiBaseURL: this.$persist(""),
-    apiKey: this.$persist(undefined),
-    model: this.$persist(undefined),
+    apiBaseURL: this.$persist(null),
+    apiKey: this.$persist(null),
+    model: this.$persist(null),
 
     nonsense: this.$persist(false),
     shenanigans: this.$persist(false),
 
     getClient() {
-      const baseURL =
-        this.apiBaseURL == "" ? "https://api.openai.com/v1/" : this.apiBaseURL;
+      const baseURL = !!this.apiBaseURL
+        ? this.apiBaseURL
+        : "https://api.openai.com/v1/";
 
       const client = new OpenAI({
         baseURL: baseURL,

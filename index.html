@@ -1,13 +1,238 @@
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  x-data="{ theme: $persist('system') }"
+  x-bind:class="{'dark': theme === 'dark' || (theme === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
+>
   <head>
     <meta charset="UTF-8" />
+    <!-- FIXME: change the icon -->
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>fkit</title>
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="bg-stone-300 dark:bg-stone-800 font-mono" x-data="app">
+    <!-- TODO(reports): read only mode / export 'report style' links -->
+    <!-- TODO(chat): when folded, only show last q/a pair, and have number of folded items in bar -->
+    <!-- TODO(asr): kroko wasm speech recognition tile -->
+    <!-- TODO(hyperlink): link tiles that point to user supplied code via interwebz -->
+
+    <!-- TODO: selection color -->
+
+    <!-- toolbar -->
+    <div
+      class="fixed inset-x-1 top-0 m-1 border-2 flex bg-stone-300 dark:bg-stone-800 text-neutral-500 dark:text-amber-400 shadow-lg/20 shadow-neutral-800 dark:shadow-orange-500"
+    >
+      <!-- light / dark selectors -->
+      <div class="flex-1 flex">
+        <div
+          class="m-1 mr-0 w-5 h-5 bg-neutral-100 cursor-pointer transition-all duration-25 hover:scale-105"
+          x-bind:class="{ 'border-2 border-orange-500': theme ==='light' }"
+          x-on:click="theme === 'light' ? theme = 'system': theme = 'light'"
+        ></div>
+        <div
+          class="m-1 w-5 h-5 bg-stone-600 cursor-pointer transition-all duration-25 hover:scale-105"
+          x-bind:class="{ 'border-2 border-orange-500': theme ==='dark' }"
+          x-on:click="theme === 'dark' ? theme = 'system' : theme = 'dark'"
+        ></div>
+      </div>
+
+      <!-- TODO: workspace selectors
+      selectable squares with rightmost being [+] to make a new one
+      use a random space alien icon for each workspace, orange border to select a new one
+      empty workspaces should get deleted as soon as you move away from them (so +++++++ ~idempotent)
+      spamming + does give new space alien tho
+      -->
+      <!-- TODO: each workspace should have an event log, and a bar button to view it -->
+      <div class="flex-1 flex justify-center">
+        <!-- TODO: replace this with a list of spaceinvaders via x-for? -->
+        <div
+          class="m-1 mr-0 w-5 h-5 bg-red-200 cursor-pointer transition-all duration-25 hover:scale-105"
+          x-bind:class="{ 'border-2 border-orange-500': theme ==='light' }"
+          x-on:click="theme === 'light' ? theme = 'system': theme = 'light'"
+        ></div>
+
+        <!-- TODO: make this a [+] -->
+        <div
+          class="m-1 w-5 h-5 bg-red-800 cursor-pointer transition-all duration-25 hover:scale-105"
+          x-bind:class="{ 'border-2 border-orange-500': theme ==='dark' }"
+          x-on:click="theme === 'dark' ? theme = 'system' : theme = 'dark'"
+        ></div>
+      </div>
+
+      <div class="flex-1 flex justify-end">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-7 items-end stroke-neutral-950 dark:stroke-neutral-300 cursor-pointer transition-all duration-25 hover:scale-105"
+          x-bind:class="{ 'fill-orange-500': configModal }"
+          x-on:click="configModal = !configModal; if (configModal) window.scrollTo(0, 0);"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div class="mt-11">
+      <div
+        class="flex justify-center"
+        x-show="configModal"
+        x-transition
+        x-cloak
+      >
+        <ul
+          class="border-2 text-neutral-500 dark:text-amber-400 text-right p-1 shadow-lg/20 shadow-neutral-800 dark:shadow-orange-500"
+        >
+          <span class="text-lg underline text-neutral-950 dark:text-neutral-300"
+            >Client Configuration</span
+          >
+
+          <li class="m-1">
+            <label for="apiBaseURL">API Base URL</label>
+            <input
+              id="apiBaseURL"
+              type="url"
+              x-model="apiBaseURL"
+              class="p-1 bg-stone-100 dark:bg-stone-700 w-72 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              placeholder="https://api.openai.com/v1/"
+            />
+          </li>
+
+          <li class="m-1">
+            <label for="apiKey">API Key</label>
+            <input
+              id="apiKey"
+              type="password"
+              x-model="apiKey"
+              class="p-1 bg-stone-100 dark:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </li>
+
+          <li class="m-1">
+            <label for="model"
+              >Model
+              <input
+                id="model"
+                type="text"
+                x-model="model"
+                class="p-1 bg-stone-100 dark:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </label>
+          </li>
+
+          <span class="text-lg underline text-neutral-950 dark:text-neutral-300"
+            >Permissions</span
+          >
+
+          <li class="m-1">
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': nonsense }"
+              x-on:click="nonsense = !nonsense"
+              >Block nonsense</span
+            >
+          </li>
+
+          <li class="m-1">
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': shenanigans }"
+              x-on:click="shenanigans = !shenanigans"
+              >Allow arbitrary shenanigans</span
+            >
+          </li>
+        </ul>
+      </div>
+
+      <!-- TODO(ux): tiling tree layout like any tiling WM - base it off of splits & such -->
+      <!-- TODO: interface to select between tile types. builtins, custom, etc -->
+
+      <!-- workspace content -->
+      <ul class="text-center text-3xl">
+        <li class="text-neutral-300 font-light">neutral-300</li>
+        <li class="text-neutral-300 font-bold">neutral-300</li>
+        <li class="text-neutral-500 font-light">neutral-500</li>
+        <li class="text-neutral-500 font-bold">neutral-500</li>
+        <li class="text-yellow-400 font-light">yellow-400</li>
+        <li class="text-yellow-400 font-bold">yellow-400</li>
+        <li class="text-amber-400 font-light">amber-400</li>
+        <li class="text-amber-400 font-bold">amber-400</li>
+        <li class="text-amber-800 font-light">amber-800</li>
+        <li class="text-amber-800 font-bold">amber-800</li>
+        <li class="text-orange-500 font-light">orange-500</li>
+        <li class="text-orange-500 font-bold">orange-500</li>
+        <li class="text-red-700 font-light">red-700</li>
+        <li class="text-red-700 font-bold">red-700</li>
+        <li class="text-emerald-600 font-light">emerald-600</li>
+        <li class="text-emerald-600 font-bold">emerald-600</li>
+
+        <li class="text-neutral-300 font-light">neutral-300</li>
+        <li class="text-neutral-300 font-bold">neutral-300</li>
+        <li class="text-neutral-500 font-light">neutral-500</li>
+        <li class="text-neutral-500 font-bold">neutral-500</li>
+        <li class="text-yellow-400 font-light">yellow-400</li>
+        <li class="text-yellow-400 font-bold">yellow-400</li>
+        <li class="text-amber-400 font-light">amber-400</li>
+        <li class="text-amber-400 font-bold">amber-400</li>
+        <li class="text-amber-800 font-light">amber-800</li>
+        <li class="text-amber-800 font-bold">amber-800</li>
+        <li class="text-orange-500 font-light">orange-500</li>
+        <li class="text-orange-500 font-bold">orange-500</li>
+        <li class="text-red-700 font-light">red-700</li>
+        <li class="text-red-700 font-bold">red-700</li>
+        <li class="text-emerald-600 font-light">emerald-600</li>
+        <li class="text-emerald-600 font-bold">emerald-600</li>
+
+        <li class="text-neutral-300 font-light">neutral-300</li>
+        <li class="text-neutral-300 font-bold">neutral-300</li>
+        <li class="text-neutral-500 font-light">neutral-500</li>
+        <li class="text-neutral-500 font-bold">neutral-500</li>
+        <li class="text-yellow-400 font-light">yellow-400</li>
+        <li class="text-yellow-400 font-bold">yellow-400</li>
+        <li class="text-amber-400 font-light">amber-400</li>
+        <li class="text-amber-400 font-bold">amber-400</li>
+        <li class="text-amber-800 font-light">amber-800</li>
+        <li class="text-amber-800 font-bold">amber-800</li>
+        <li class="text-orange-500 font-light">orange-500</li>
+        <li class="text-orange-500 font-bold">orange-500</li>
+        <li class="text-red-700 font-light">red-700</li>
+        <li class="text-red-700 font-bold">red-700</li>
+        <li class="text-emerald-600 font-light">emerald-600</li>
+        <li class="text-emerald-600 font-bold">emerald-600</li>
+
+        <li class="text-neutral-300 font-light">neutral-300</li>
+        <li class="text-neutral-300 font-bold">neutral-300</li>
+        <li class="text-neutral-500 font-light">neutral-500</li>
+        <li class="text-neutral-500 font-bold">neutral-500</li>
+        <li class="text-yellow-400 font-light">yellow-400</li>
+        <li class="text-yellow-400 font-bold">yellow-400</li>
+        <li class="text-amber-400 font-light">amber-400</li>
+        <li class="text-amber-400 font-bold">amber-400</li>
+        <li class="text-amber-800 font-light">amber-800</li>
+        <li class="text-amber-800 font-bold">amber-800</li>
+        <li class="text-orange-500 font-light">orange-500</li>
+        <li class="text-orange-500 font-bold">orange-500</li>
+        <li class="text-red-700 font-light">red-700</li>
+        <li class="text-red-700 font-bold">red-700</li>
+        <li class="text-emerald-600 font-light">emerald-600</li>
+        <li class="text-emerald-600 font-bold">emerald-600</li>
+      </ul>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

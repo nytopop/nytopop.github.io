@@ -24,6 +24,10 @@ light text (faint -> bold): 500 -> 800 -> 950
   display: none !important;
 }
 
+.bg-selection {
+  @apply selection:bg-emerald-200 dark:selection:bg-emerald-800;
+}
+
 .bg-main {
   @apply bg-stone-300 dark:bg-stone-800;
 }

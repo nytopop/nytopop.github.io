@@ -6,21 +6,18 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <!-- FIXME: change the icon -->
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- TODO: icon -->
+    <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mkit</title>
+    <title>mkit yours</title>
   </head>
-  <body class="bg-main font-mono" x-data="app">
-    <!-- TODO: selection color -->
-    <!-- TODO: interface to select between tile types. builtins, custom, etc -->
-
+  <body class="bg-main bg-selection font-mono" x-data="app">
     <!-- toolbar -->
     <div
       class="max-h-screen fixed inset-x-1 top-0 m-1 border-0 flex bg-stone-300 dark:bg-stone-800"
     >
       <!-- light / dark mode -->
-      <!-- FIXME: pressing this should not modify selection for consistency in omni bar and config -->
+      <!-- TODO: pressing this should not modify selection for consistency in omni bar and config -->
       <div class="flex-1 flex">
         <div
           class="m-1 mr-0 size-5 bg-neutral-100 cursor-pointer transition-all duration-25 hover:scale-105"
@@ -34,19 +31,12 @@
         ></div>
       </div>
 
-      <!-- TODO
-      [x] fit content up to max y size, at which point we scroll in the content area of the bar
-      [x] action select list goes on the tail, also with scroll but avoid wherever possible
-      [x] on selecting the input, we should open the tail as a flexbox div thing
-      [ ] should persist the contents of the input, it might represent a lot
-      [ ] max 5 (one line) items in the action list (rather, compress them if space is limited)
-      -->
-
       <!-- omni bar -->
       <div
         class="flex-5 flex flex-col m-1"
         x-data="{ omni: '', text: false, list: false }"
       >
+        <!-- TODO: consider persisting the contents of this input -->
         <textarea
           placeholder="You can do anything in the omni bar. Anything at all..."
           class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow-lg resize-none"
@@ -62,6 +52,7 @@
 
         <!-- TODO: should be able to mark tiles for omni bar priority -->
         <!-- TODO: actions need +/- nice buttons to generate preference data -->
+        <!-- FIXME: focusing moves the div before onclick triggers -->
         <div
           class="text-neutral-500 dark:text-neutral-400"
           x-show="text || list"
@@ -180,10 +171,10 @@
 
           <li class="m-1">
             <span
-              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              class="cursor-pointer transition-all duration-25 hover:font-bold select-none"
               x-bind:class="{ 'text-orange-500': antiglaze }"
               x-on:click="antiglaze = !antiglaze"
-              >Suppress glazing</span
+              >Suppress glazing related shenanigans</span
             >
           </li>
 

@@ -47,7 +47,6 @@
         class="flex-5 flex flex-col m-1"
         x-data="{ omni: '', text: false, list: false }"
       >
-        <!-- FIXME: autosize has to keep working while action select items are selected -->
         <textarea
           placeholder="You can do anything in the omni bar. Anything at all..."
           class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow resize-none"
@@ -62,46 +61,47 @@
         </textarea>
 
         <!-- TODO: should be able to mark tiles for omni bar priority -->
+        <!-- TODO: actions need +/- nice buttons to generate preference data -->
         <div
           class="text-neutral-500 dark:text-neutral-400"
           x-show="text || list"
           x-transition
         >
-          <!-- TODO: each of these needs a +/- nice button to get preference data -->
           <div
             class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
             tabindex="0"
-            x-on:click=""
-            x-on:keydown.enter=""
+            x-on:click="$el.blur()"
+            x-on:keydown.enter="$el.blur()"
             x-on:keydown.escape="$refs.bar.focus()"
             x-on:focus="list = true"
             x-on:blur="list = false"
           >
-            Breaking news!!!
+            <strong>1) </strong>Breaking news!!!
           </div>
 
           <div
             class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
             tabindex="0"
-            x-on:click=""
-            x-on:keydown.enter=""
+            x-on:click="$el.blur()"
+            x-on:keydown.enter="$el.blur()"
             x-on:keydown.escape="$refs.bar.focus()"
             x-on:focus="list = true"
             x-on:blur="list = false"
           >
-            Some bullshit happened and it's NOT what you think!
+            <strong>2) </strong>Some bullshit happened and it's NOT what you
+            think!
           </div>
 
           <div
             class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
             tabindex="0"
-            x-on:click=""
-            x-on:keydown.enter=""
+            x-on:click="$el.blur()"
+            x-on:keydown.enter="$el.blur()"
             x-on:keydown.escape="$refs.bar.focus()"
             x-on:focus="list = true"
             x-on:blur="list = false"
           >
-            You'll NEVER guess what happens next!?
+            <strong>3) </strong>You'll NEVER guess what happens next!?
           </div>
         </div>
       </div>

@@ -50,8 +50,12 @@ light text (faint -> bold): 500 -> 800 -> 950
   @apply text-neutral-500 dark:text-neutral-400;
 }
 
-.boxshadow {
+.boxshadow-lg {
   @apply shadow-lg/20 shadow-neutral-800 dark:shadow-lg/40 dark:shadow-neutral-950;
+}
+
+.boxshadow-sm {
+  @apply shadow-sm/20 shadow-neutral-800 dark:shadow-sm/40 dark:shadow-neutral-950;
 }
 
 .focus-1 {

@@ -49,7 +49,7 @@
       >
         <textarea
           placeholder="You can do anything in the omni bar. Anything at all..."
-          class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow resize-none"
+          class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow-lg resize-none"
           x-model="omni"
           x-on:keydown.escape="$el.blur()"
           x-on:focus="text = true; autosize($el)"
@@ -68,7 +68,7 @@
           x-transition
         >
           <div
-            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
+            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow-lg focus-1"
             tabindex="0"
             x-on:click="$el.blur()"
             x-on:keydown.enter="$el.blur()"
@@ -80,7 +80,7 @@
           </div>
 
           <div
-            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
+            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow-lg focus-1"
             tabindex="0"
             x-on:click="$el.blur()"
             x-on:keydown.enter="$el.blur()"
@@ -93,7 +93,7 @@
           </div>
 
           <div
-            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
+            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow-lg focus-1"
             tabindex="0"
             x-on:click="$el.blur()"
             x-on:keydown.enter="$el.blur()"
@@ -117,8 +117,8 @@
           stroke-width="1.5"
           stroke="currentColor"
           class="size-7 stroke-neutral-950 dark:stroke-neutral-300 cursor-pointer transition-all duration-25 hover:scale-105"
-          x-bind:class="{ 'fill-orange-500': configModal }"
-          x-on:click="configModal = !configModal; if (configModal) window.scrollTo(0, 0);"
+          x-bind:class="{ 'fill-orange-500': configmodal }"
+          x-on:click="configmodal = !configmodal; if (configmodal) window.scrollTo(0, 0);"
         >
           <path
             stroke-linecap="round"
@@ -138,12 +138,12 @@
     <div class="mt-24">
       <div
         class="flex justify-center"
-        x-show="configModal"
+        x-show="configmodal"
         x-transition
         x-cloak
       >
-        <ul class="border-2 bg-child text-min text-right p-1 boxshadow">
-          <span class="text-lg underline text-max">Client Configuration</span>
+        <ul class="border-2 bg-child text-min text-right p-1 boxshadow-lg">
+          <li class="text-lg underline text-max">Client Configuration</li>
 
           <li class="m-1">
             <label for="apiBaseURL">API Base URL</label>
@@ -151,7 +151,7 @@
               id="apiBaseURL"
               type="url"
               x-model="apiBaseURL"
-              class="p-1 w-72 bg-input text-input focus-2"
+              class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
               placeholder="https://api.openai.com/v1/"
             />
           </li>
@@ -162,48 +162,39 @@
               id="apiKey"
               type="password"
               x-model="apiKey"
-              class="p-1 w-72 bg-input text-input focus-2"
+              class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
             />
           </li>
 
-          <li class="m-1 flex-grow">
+          <li class="m-1">
             <label for="model">Model </label>
             <input
               id="model"
               type="text"
               x-model="model"
-              class="p-1 bg-input text-input focus-2"
+              class="p-1 bg-input text-input focus-2 boxshadow-sm"
             />
           </li>
 
-          <span class="text-lg underline text-max">Permissions</span>
+          <li class="text-lg underline text-max">Tweaks</li>
 
           <li class="m-1">
             <span
               class="cursor-pointer transition-all duration-25 hover:font-bold"
-              x-bind:class="{ 'text-orange-500': nonsense }"
-              x-on:click="nonsense = !nonsense"
-              >Block nonsense</span
+              x-bind:class="{ 'text-orange-500': antiglaze }"
+              x-on:click="antiglaze = !antiglaze"
+              >Suppress glazing</span
             >
           </li>
 
-          <li class="m-1">
-            <span
-              class="cursor-pointer transition-all duration-25 hover:font-bold"
-              x-bind:class="{ 'text-orange-500': shenanigans }"
-              x-on:click="shenanigans = !shenanigans"
-              >Allow arbitrary shenanigans</span
-            >
-          </li>
+          <!-- <li class="text-lg underline text-max">Import/Export</li> -->
 
-          <span class="text-lg underline text-max">Import/Export</span>
+          <li class="text-lg underline text-max">About</li>
 
-          <li />
-
-          <span class="text-lg underline text-max">About</span>
+          <li class="m-1">fkit ver <span x-text="__GIT_VERSION__" /></li>
 
           <li class="m-1">
-            Made by Eric Izoita (<a href="mailto:ericizoita@gmail.com"
+            by Eric Izoita (<a href="mailto:ericizoita@gmail.com"
               >ericizoita@gmail.com</a
             >)
           </li>

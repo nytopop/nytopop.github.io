@@ -3,17 +3,61 @@
 /* colors
 dark          light         function
 stone-800   : stone-300   : bg
-neutral-300 : neutral-950 : normal text
-neutral-500 : darker text
+            : neutral-500 : lighter text
+neutral-300 : neutral-800 : normal text
+neutral-??? : neutral-??? : darker text
+
 amber-400   : neutral-500 : bright text
 amber-800   : amber-800   : dark angry text (errs)
 orange-500  : orange-500  : bold happy text (box shadows)
 red-700     : red-700     : very angry text (super errs)
 emerald-600 : emerald-600 : weird text
+
+-- neutrals for text --
+light text (faint -> bold): 500 -> 800 -> 950
+ dark text (faint -> bold): 400 -> 200 -> 50
 */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 [x-cloak] {
   display: none !important;
+}
+
+.bg-main {
+  @apply bg-stone-300 dark:bg-stone-800;
+}
+
+.bg-child {
+  @apply bg-stone-200 dark:bg-stone-900;
+}
+
+.bg-input {
+  @apply bg-stone-100 dark:bg-stone-700;
+}
+
+.text-input {
+  @apply text-neutral-800 dark:text-neutral-100;
+}
+
+.text-max {
+  @apply text-neutral-950 dark:text-neutral-50;
+}
+
+/* TODO: more text variants? */
+
+.text-min {
+  @apply text-neutral-500 dark:text-neutral-400;
+}
+
+.boxshadow {
+  @apply shadow-lg/20 shadow-neutral-800 dark:shadow-lg/40 dark:shadow-neutral-950;
+}
+
+.focus-1 {
+  @apply focus:outline-none focus:ring-1 focus:ring-orange-500;
+}
+
+.focus-2 {
+  @apply focus:outline-none focus:ring-2 focus:ring-orange-500;
 }

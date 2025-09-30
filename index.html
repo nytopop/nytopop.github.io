@@ -11,79 +11,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>fkit</title>
   </head>
-  <body class="bg-stone-300 dark:bg-stone-800 font-mono" x-data="app">
+  <body class="bg-main font-mono" x-data="app">
     <!-- TODO: selection color -->
+    <!-- TODO: interface to select between tile types. builtins, custom, etc -->
 
     <!-- toolbar -->
     <div
-      class="fixed inset-x-1 top-0 m-1 border-2 flex bg-stone-300 dark:bg-stone-800 text-neutral-500 dark:text-amber-400 shadow-lg/20 shadow-neutral-800 dark:shadow-orange-500"
+      class="max-h-screen fixed inset-x-1 top-0 m-1 border-0 flex bg-stone-300 dark:bg-stone-800"
     >
-      <!-- light / dark selectors -->
+      <!-- light / dark mode -->
+      <!-- FIXME: pressing this should not modify selection for consistency in omni bar and config -->
       <div class="flex-1 flex">
         <div
           class="m-1 mr-0 size-5 bg-neutral-100 cursor-pointer transition-all duration-25 hover:scale-105"
-          x-bind:class="{ 'border-2 border-orange-500': theme ==='light' }"
+          x-bind:class="{ 'border-2 border-orange-500': theme === 'light' }"
           x-on:click="theme === 'light' ? theme = 'system': theme = 'light'"
         ></div>
         <div
           class="m-1 mr-0 size-5 bg-stone-600 cursor-pointer transition-all duration-25 hover:scale-105"
-          x-bind:class="{ 'border-2 border-orange-500': theme ==='dark' }"
+          x-bind:class="{ 'border-2 border-orange-500': theme === 'dark' }"
           x-on:click="theme === 'dark' ? theme = 'system' : theme = 'dark'"
         ></div>
       </div>
 
-      <!-- workspace selectors -->
-      <!-- TODO: moving away from an empty ws should delete it (move, press new, etc) -->
-      <div class="flex-5 flex justify-center overflow-x-scroll overflow-y-clip">
-        <template x-for="(w, ix) in workspaces">
+      <!-- TODO
+      [x] fit content up to max y size, at which point we scroll in the content area of the bar
+      [x] action select list goes on the tail, also with scroll but avoid wherever possible
+      [x] on selecting the input, we should open the tail as a flexbox div thing
+      [ ] should persist the contents of the input, it might represent a lot
+      [ ] max 5 (one line) items in the action list (rather, compress them if space is limited)
+      -->
+
+      <!-- omni bar -->
+      <div
+        class="flex-5 flex flex-col m-1"
+        x-data="{ omni: '', text: false, list: false }"
+      >
+        <!-- FIXME: autosize has to keep working while action select items are selected -->
+        <textarea
+          placeholder="You can do anything in the omni bar. Anything at all..."
+          class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow resize-none"
+          x-model="omni"
+          x-on:keydown.escape="$el.blur()"
+          x-on:focus="text = true; autosize($el)"
+          x-on:blur="text = false; $el.style.height = ''"
+          x-on:input="autosize($el)"
+          x-on:input.debounce.200ms="omnifunc(omni);"
+          x-ref="bar"
+        >
+        </textarea>
+
+        <!-- TODO: should be able to mark tiles for omni bar priority -->
+        <div
+          class="text-neutral-500 dark:text-neutral-400"
+          x-show="text || list"
+          x-transition
+        >
+          <!-- TODO: each of these needs a +/- nice button to get preference data -->
           <div
-            class="cursor-pointer transition-all duration-25 hover:scale-125"
-            x-bind:class="{ 'bg-orange-500': selected === ix }"
-            x-on:click="selected = ix"
-            x-html="icon(w.ident, 28)"
-          ></div>
-        </template>
+            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
+            tabindex="0"
+            x-on:click=""
+            x-on:keydown.enter=""
+            x-on:keydown.escape="$refs.bar.focus()"
+            x-on:focus="list = true"
+            x-on:blur="list = false"
+          >
+            Breaking news!!!
+          </div>
+
+          <div
+            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
+            tabindex="0"
+            x-on:click=""
+            x-on:keydown.enter=""
+            x-on:keydown.escape="$refs.bar.focus()"
+            x-on:focus="list = true"
+            x-on:blur="list = false"
+          >
+            Some bullshit happened and it's NOT what you think!
+          </div>
+
+          <div
+            class="flex-grow mt-2 m-1 p-1 bg-child boxshadow focus-1"
+            tabindex="0"
+            x-on:click=""
+            x-on:keydown.enter=""
+            x-on:keydown.escape="$refs.bar.focus()"
+            x-on:focus="list = true"
+            x-on:blur="list = false"
+          >
+            You'll NEVER guess what happens next!?
+          </div>
+        </div>
       </div>
 
-      <!-- quick actions -->
+      <!-- config button -->
       <div class="flex-1 flex justify-end">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-7 stroke-neutral-950 dark:stroke-neutral-300 cursor-pointer transition-all duration-25 hover:scale-105"
-          x-on:click="newWorkspace()"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-          />
-        </svg>
-
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-7 stroke-neutral-950 dark:stroke-neutral-300 cursor-pointer transition-all duration-25 hover:scale-105"
-          x-on:click="delWorkspace()"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-          />
-        </svg>
-
-        <!-- config -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -110,19 +134,16 @@
       </div>
     </div>
 
-    <div class="mt-11">
+    <!-- config modal -->
+    <div class="mt-24">
       <div
         class="flex justify-center"
         x-show="configModal"
         x-transition
         x-cloak
       >
-        <ul
-          class="border-2 text-neutral-500 dark:text-amber-400 text-right p-1 shadow-lg/20 shadow-neutral-800 dark:shadow-orange-500"
-        >
-          <span class="text-lg underline text-neutral-950 dark:text-neutral-300"
-            >Client Configuration</span
-          >
+        <ul class="border-2 bg-child text-min text-right p-1 boxshadow">
+          <span class="text-lg underline text-max">Client Configuration</span>
 
           <li class="m-1">
             <label for="apiBaseURL">API Base URL</label>
@@ -130,7 +151,7 @@
               id="apiBaseURL"
               type="url"
               x-model="apiBaseURL"
-              class="p-1 bg-stone-100 dark:bg-stone-700 w-72 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              class="p-1 w-72 bg-input text-input focus-2"
               placeholder="https://api.openai.com/v1/"
             />
           </li>
@@ -141,25 +162,21 @@
               id="apiKey"
               type="password"
               x-model="apiKey"
-              class="p-1 bg-stone-100 dark:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              class="p-1 w-72 bg-input text-input focus-2"
             />
           </li>
 
-          <li class="m-1">
-            <label for="model"
-              >Model
-              <input
-                id="model"
-                type="text"
-                x-model="model"
-                class="p-1 bg-stone-100 dark:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </label>
+          <li class="m-1 flex-grow">
+            <label for="model">Model </label>
+            <input
+              id="model"
+              type="text"
+              x-model="model"
+              class="p-1 bg-input text-input focus-2"
+            />
           </li>
 
-          <span class="text-lg underline text-neutral-950 dark:text-neutral-300"
-            >Permissions</span
-          >
+          <span class="text-lg underline text-max">Permissions</span>
 
           <li class="m-1">
             <span
@@ -178,82 +195,22 @@
               >Allow arbitrary shenanigans</span
             >
           </li>
+
+          <span class="text-lg underline text-max">Import/Export</span>
+
+          <li />
+
+          <span class="text-lg underline text-max">About</span>
+
+          <li class="m-1">
+            Made by Eric Izoita (<a href="mailto:ericizoita@gmail.com"
+              >ericizoita@gmail.com</a
+            >)
+          </li>
         </ul>
       </div>
 
-      <!-- TODO(ux): tiling tree layout like any tiling WM - base it off of splits & such -->
-      <!-- TODO: interface to select between tile types. builtins, custom, etc -->
-
-      <!-- workspace content -->
-      <ul class="text-center text-3xl">
-        <li class="text-neutral-300 font-light">neutral-300</li>
-        <li class="text-neutral-300 font-bold">neutral-300</li>
-        <li class="text-neutral-500 font-light">neutral-500</li>
-        <li class="text-neutral-500 font-bold">neutral-500</li>
-        <li class="text-yellow-400 font-light">yellow-400</li>
-        <li class="text-yellow-400 font-bold">yellow-400</li>
-        <li class="text-amber-400 font-light">amber-400</li>
-        <li class="text-amber-400 font-bold">amber-400</li>
-        <li class="text-amber-800 font-light">amber-800</li>
-        <li class="text-amber-800 font-bold">amber-800</li>
-        <li class="text-orange-500 font-light">orange-500</li>
-        <li class="text-orange-500 font-bold">orange-500</li>
-        <li class="text-red-700 font-light">red-700</li>
-        <li class="text-red-700 font-bold">red-700</li>
-        <li class="text-emerald-600 font-light">emerald-600</li>
-        <li class="text-emerald-600 font-bold">emerald-600</li>
-
-        <li class="text-neutral-300 font-light">neutral-300</li>
-        <li class="text-neutral-300 font-bold">neutral-300</li>
-        <li class="text-neutral-500 font-light">neutral-500</li>
-        <li class="text-neutral-500 font-bold">neutral-500</li>
-        <li class="text-yellow-400 font-light">yellow-400</li>
-        <li class="text-yellow-400 font-bold">yellow-400</li>
-        <li class="text-amber-400 font-light">amber-400</li>
-        <li class="text-amber-400 font-bold">amber-400</li>
-        <li class="text-amber-800 font-light">amber-800</li>
-        <li class="text-amber-800 font-bold">amber-800</li>
-        <li class="text-orange-500 font-light">orange-500</li>
-        <li class="text-orange-500 font-bold">orange-500</li>
-        <li class="text-red-700 font-light">red-700</li>
-        <li class="text-red-700 font-bold">red-700</li>
-        <li class="text-emerald-600 font-light">emerald-600</li>
-        <li class="text-emerald-600 font-bold">emerald-600</li>
-
-        <li class="text-neutral-300 font-light">neutral-300</li>
-        <li class="text-neutral-300 font-bold">neutral-300</li>
-        <li class="text-neutral-500 font-light">neutral-500</li>
-        <li class="text-neutral-500 font-bold">neutral-500</li>
-        <li class="text-yellow-400 font-light">yellow-400</li>
-        <li class="text-yellow-400 font-bold">yellow-400</li>
-        <li class="text-amber-400 font-light">amber-400</li>
-        <li class="text-amber-400 font-bold">amber-400</li>
-        <li class="text-amber-800 font-light">amber-800</li>
-        <li class="text-amber-800 font-bold">amber-800</li>
-        <li class="text-orange-500 font-light">orange-500</li>
-        <li class="text-orange-500 font-bold">orange-500</li>
-        <li class="text-red-700 font-light">red-700</li>
-        <li class="text-red-700 font-bold">red-700</li>
-        <li class="text-emerald-600 font-light">emerald-600</li>
-        <li class="text-emerald-600 font-bold">emerald-600</li>
-
-        <li class="text-neutral-300 font-light">neutral-300</li>
-        <li class="text-neutral-300 font-bold">neutral-300</li>
-        <li class="text-neutral-500 font-light">neutral-500</li>
-        <li class="text-neutral-500 font-bold">neutral-500</li>
-        <li class="text-yellow-400 font-light">yellow-400</li>
-        <li class="text-yellow-400 font-bold">yellow-400</li>
-        <li class="text-amber-400 font-light">amber-400</li>
-        <li class="text-amber-400 font-bold">amber-400</li>
-        <li class="text-amber-800 font-light">amber-800</li>
-        <li class="text-amber-800 font-bold">amber-800</li>
-        <li class="text-orange-500 font-light">orange-500</li>
-        <li class="text-orange-500 font-bold">orange-500</li>
-        <li class="text-red-700 font-light">red-700</li>
-        <li class="text-red-700 font-bold">red-700</li>
-        <li class="text-emerald-600 font-light">emerald-600</li>
-        <li class="text-emerald-600 font-bold">emerald-600</li>
-      </ul>
+      <!-- TODO: context content -->
     </div>
 
     <script type="module" src="/src/main.ts"></script>

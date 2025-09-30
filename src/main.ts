@@ -17,9 +17,6 @@ import "./style.css";
 import Alpine from "alpinejs";
 import persist from "@alpinejs/persist";
 import OpenAI from "openai";
-import { v4 as uuidv4 } from "uuid";
-import { createAvatar } from "@dicebear/core";
-import { pixelArt } from "@dicebear/collection";
 
 declare const window: any;
 
@@ -27,16 +24,14 @@ window.Alpine = Alpine;
 
 Alpine.plugin(persist);
 
-interface Workspace {
-  ident: string;
+// A document-like data structure in which all entries are mutually addressable.
+//
+// Intended to be persisted within IndexedDB.
+interface Context {
+  name: string;
 }
 
 interface App {
-  // ui state
-  configModal: boolean;
-  workspaces: Workspace[];
-  selected: number;
-
   // client config
   apiBaseURL: string | undefined;
   apiKey: string | undefined;
@@ -46,19 +41,17 @@ interface App {
   nonsense: boolean;
   shenanigans: boolean;
 
+  // ui
+  configModal: boolean;
+
   // api
-  newWorkspace(): void;
-  delWorkspace(): void;
-  icon(seed: any, size: any): string;
+  autosize(bar: HTMLTextAreaElement): void;
+  omnifunc(omni: string): void;
   getClient(): OpenAI;
 }
 
 Alpine.data("app", function (this: { $persist: (v: any) => any }): App {
   let app: App = {
-    configModal: false,
-    workspaces: [],
-    selected: 0, // TODO: persist ofc
-
     apiBaseURL: this.$persist(null),
     apiKey: this.$persist(null),
     model: this.$persist(null),
@@ -66,37 +59,16 @@ Alpine.data("app", function (this: { $persist: (v: any) => any }): App {
     nonsense: this.$persist(false),
     shenanigans: this.$persist(false),
 
-    newWorkspace() {
-      const ident = uuidv4();
+    configModal: false,
 
-      console.log(ident);
-
-      this.workspaces.push({
-        ident: ident,
-      });
-
-      this.selected = this.workspaces.length - 1;
+    autosize(bar) {
+      bar.style.height = "";
+      bar.style.height = bar.scrollHeight + "px";
     },
 
-    delWorkspace() {
-      this.workspaces.splice(this.selected, 1);
-
-      if (this.workspaces.length === 0) {
-        this.newWorkspace();
-      }
-
-      if (this.selected >= this.workspaces.length) {
-        this.selected--;
-      }
-    },
-
-    icon(seed, size) {
-      const avatar = createAvatar(pixelArt, {
-        seed: seed,
-        size: size,
-      });
-
-      return avatar.toString();
+    // TODO: write the omni func
+    omnifunc(omni) {
+      console.log(omni);
     },
 
     getClient() {

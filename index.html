@@ -9,7 +9,7 @@
     <!-- FIXME: change the icon -->
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>fkit</title>
+    <title>mkit</title>
   </head>
   <body class="bg-main font-mono" x-data="app">
     <!-- TODO: selection color -->
@@ -146,22 +146,22 @@
           <li class="text-lg underline text-max">Client Configuration</li>
 
           <li class="m-1">
-            <label for="apiBaseURL">API Base URL</label>
+            <label for="apibase">API Base URL</label>
             <input
-              id="apiBaseURL"
+              id="apibase"
               type="url"
-              x-model="apiBaseURL"
+              x-model="apibase"
               class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
               placeholder="https://api.openai.com/v1/"
             />
           </li>
 
           <li class="m-1">
-            <label for="apiKey">API Key</label>
+            <label for="apikey">API Key</label>
             <input
-              id="apiKey"
+              id="apikey"
               type="password"
-              x-model="apiKey"
+              x-model="apikey"
               class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
             />
           </li>
@@ -191,7 +191,7 @@
 
           <li class="text-lg underline text-max">About</li>
 
-          <li class="m-1">fkit ver <span x-text="__GIT_VERSION__" /></li>
+          <li class="m-1">mkit ver <span x-text="__GIT_VERSION__" /></li>
 
           <li class="m-1">
             by Eric Izoita (<a href="mailto:ericizoita@gmail.com"

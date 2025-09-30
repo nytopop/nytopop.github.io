@@ -14,79 +14,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import "./style.css";
+import { App } from "./app.ts";
+
 import Alpine from "alpinejs";
 import persist from "@alpinejs/persist";
-import OpenAI from "openai";
 
 declare const window: any;
 
 window.Alpine = Alpine;
 
 Alpine.plugin(persist);
-
-// A document-like data structure in which all entries are mutually addressable.
-//
-// Intended to be persisted within IndexedDB.
-interface Context {
-  name: string;
-}
-
-interface App {
-  // client config
-  apiBaseURL: string | undefined;
-  apiKey: string | undefined;
-  model: string | undefined;
-
-  // permissions
-  nonsense: boolean;
-  shenanigans: boolean;
-
-  // ui
-  configModal: boolean;
-
-  // api
-  autosize(bar: HTMLTextAreaElement): void;
-  omnifunc(omni: string): void;
-  getClient(): OpenAI;
-}
-
-Alpine.data("app", function (this: { $persist: (v: any) => any }): App {
-  let app: App = {
-    apiBaseURL: this.$persist(null),
-    apiKey: this.$persist(null),
-    model: this.$persist(null),
-
-    nonsense: this.$persist(false),
-    shenanigans: this.$persist(false),
-
-    configModal: false,
-
-    autosize(bar) {
-      bar.style.height = "";
-      bar.style.height = bar.scrollHeight + "px";
-    },
-
-    // TODO: write the omni func
-    omnifunc(omni) {
-      console.log(omni);
-    },
-
-    getClient() {
-      const baseURL = !!this.apiBaseURL
-        ? this.apiBaseURL
-        : "https://api.openai.com/v1/";
-
-      const client = new OpenAI({
-        baseURL: baseURL,
-        apiKey: this.apiKey,
-        dangerouslyAllowBrowser: true,
-      });
-
-      return client;
-    },
-  };
-
-  return app;
-});
-
+Alpine.data("app", () => new App());
 Alpine.start();

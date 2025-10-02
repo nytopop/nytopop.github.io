@@ -9,9 +9,10 @@
     <!-- TODO: icon -->
     <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mkit yours</title>
+    <title>mkit</title>
   </head>
   <body class="bg-main bg-selection font-mono" x-data="app">
+    <!-- TODO(responsive): when screen is narrow, don't show settings gear or dark/light mode -->
     <!-- toolbar -->
     <div
       class="max-h-screen fixed inset-x-1 top-0 m-1 border-0 flex bg-stone-300 dark:bg-stone-800"
@@ -38,21 +39,21 @@
       >
         <!-- TODO: consider persisting the contents of this input -->
         <textarea
-          placeholder="You can do anything in the omni bar. Anything at all..."
+          placeholder="You can do anything in the omni bar—anything at all..."
           class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow-lg resize-none"
           x-model="omni"
           x-on:keydown.escape="$el.blur()"
           x-on:focus="text = true; autosize($el)"
-          x-on:blur="text = false; $el.style.height = ''"
+          x-on:blur="text = false; collapse($el)"
           x-on:input="autosize($el)"
-          x-on:input.debounce.200ms="omnifunc(omni);"
+          x-on:input.debounce.200ms="await omnifunc(omni)"
           x-ref="bar"
         >
         </textarea>
 
         <!-- TODO: should be able to mark tiles for omni bar priority -->
         <!-- TODO: actions need +/- nice buttons to generate preference data -->
-        <!-- FIXME: focusing moves the div before onclick triggers -->
+
         <div
           class="text-neutral-500 dark:text-neutral-400"
           x-show="text || list"
@@ -64,8 +65,8 @@
             x-on:click="$el.blur()"
             x-on:keydown.enter="$el.blur()"
             x-on:keydown.escape="$refs.bar.focus()"
-            x-on:focus="list = true"
-            x-on:blur="list = false"
+            x-on:focus="list = true; autosize($refs.bar)"
+            x-on:blur="list = false; collapse($refs.bar)"
           >
             <strong>1) </strong>Breaking news!!!
           </div>
@@ -76,8 +77,8 @@
             x-on:click="$el.blur()"
             x-on:keydown.enter="$el.blur()"
             x-on:keydown.escape="$refs.bar.focus()"
-            x-on:focus="list = true"
-            x-on:blur="list = false"
+            x-on:focus="list = true; autosize($refs.bar)"
+            x-on:blur="list = false; collapse($refs.bar)"
           >
             <strong>2) </strong>Some bullshit happened and it's NOT what you
             think!
@@ -89,8 +90,8 @@
             x-on:click="$el.blur()"
             x-on:keydown.enter="$el.blur()"
             x-on:keydown.escape="$refs.bar.focus()"
-            x-on:focus="list = true"
-            x-on:blur="list = false"
+            x-on:focus="list = true; autosize($refs.bar)"
+            x-on:blur="list = false; collapse($refs.bar)"
           >
             <strong>3) </strong>You'll NEVER guess what happens next!?
           </div>
@@ -125,6 +126,8 @@
       </div>
     </div>
 
+    <!-- TODO: with shift held, hovering over UI elements should display floating help windows -->
+
     <!-- config modal -->
     <div class="mt-24">
       <div
@@ -134,16 +137,32 @@
         x-cloak
       >
         <ul class="border-2 bg-child text-min text-right p-1 boxshadow-lg">
-          <li class="text-lg underline text-max">Client Configuration</li>
+          <li class="cursor-default">
+            <span
+              class="select-none"
+              x-data="{ status: 'unknown' }"
+              x-init="status = await apistatus(); $watch('apiurl, apikey, model', () => { status = 'unknown'; $dispatch('argupdate'); });"
+              x-on:argupdate.debounce.750ms="status = await apistatus()"
+              x-on:click="status = await apistatus()"
+              x-text="status"
+              x-bind:class="{
+                'animate-ping': status === 'unknown',
+                'text-emerald-600': status === 'ok',
+                'text-red-500': status !== 'unknown' && status !== 'ok',
+              }"
+            ></span>
+
+            <span class="text-lg underline text-max">Inference</span>
+          </li>
 
           <li class="m-1">
-            <label for="apibase">API Base URL</label>
+            <label for="apiurl">API URL</label>
             <input
-              id="apibase"
+              id="apiurl"
               type="url"
-              x-model="apibase"
-              class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
               placeholder="https://api.openai.com/v1/"
+              class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
+              x-model="apiurl"
             />
           </li>
 
@@ -152,8 +171,8 @@
             <input
               id="apikey"
               type="password"
-              x-model="apikey"
               class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
+              x-model="apikey"
             />
           </li>
 
@@ -162,25 +181,90 @@
             <input
               id="model"
               type="text"
+              placeholder="default"
+              class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
               x-model="model"
-              class="p-1 bg-input text-input focus-2 boxshadow-sm"
             />
           </li>
 
-          <li class="text-lg underline text-max">Tweaks</li>
+          <li class="text-lg underline text-max cursor-default">Tweaks</li>
+
+          <li class="m-1 select-none">
+            Glazing:
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': glazing == 'suppress' }"
+              x-on:click="glazing === 'suppress' ? glazing = null : glazing = 'suppress'"
+              >suppress</span
+            >
+            /
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': glazing == 'enforce' }"
+              x-on:click="glazing === 'enforce' ? glazing = null : glazing = 'enforce'"
+              >enforce</span
+            >
+          </li>
+
+          <li class="m-1 select-none">
+            Deception:
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': deception == 'suppress' }"
+              x-on:click="deception === 'suppress' ? deception = null : deception = 'suppress'"
+              >suppress</span
+            >
+            /
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': deception == 'enforce' }"
+              x-on:click="deception === 'enforce' ? deception = null :  deception = 'enforce'"
+              >enforce</span
+            >
+          </li>
+
+          <!-- FIXME: maybe not slop because the overall process is supposed to be antislop -->
+          <li class="m-1 select-none">
+            AI Slop:
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': aislop == 'suppress' }"
+              x-on:click="aislop === 'suppress' ? aislop = null : aislop = 'suppress'"
+              >suppress</span
+            >
+            /
+            <span
+              class="cursor-pointer transition-all duration-25 hover:font-bold"
+              x-bind:class="{ 'text-orange-500': aislop == 'enforce' }"
+              x-on:click="aislop === 'enforce' ? aislop = null : aislop = 'enforce'"
+              >enforce</span
+            >
+          </li>
 
           <li class="m-1">
-            <span
-              class="cursor-pointer transition-all duration-25 hover:font-bold select-none"
-              x-bind:class="{ 'text-orange-500': antiglaze }"
-              x-on:click="antiglaze = !antiglaze"
-              >Suppress glazing related shenanigans</span
+            <label
+              for="rolemodel"
+              x-bind:class="{ 'text-orange-500': rolemodel }"
+              >Would</label
+            >
+
+            <input
+              id="rolemodel"
+              type="text"
+              class="px-1 bg-input text-input focus-2 boxshadow-sm"
+              x-model="rolemodel"
+            />
+
+            <label
+              for="rolemodel"
+              x-bind:class="{ 'text-orange-500': rolemodel }"
+              >do that?</label
             >
           </li>
 
           <!-- <li class="text-lg underline text-max">Import/Export</li> -->
 
-          <li class="text-lg underline text-max">About</li>
+          <hr class="mt-4 mb-2" />
 
           <li class="m-1">mkit ver <span x-text="__GIT_VERSION__" /></li>
 
@@ -188,6 +272,13 @@
             by Eric Izoita (<a href="mailto:ericizoita@gmail.com"
               >ericizoita@gmail.com</a
             >)
+          </li>
+
+          <li class="m-1">
+            under
+            <a href="https://www.gnu.org/licenses/agpl-3.0.txt"
+              >AGPL-3.0-or-later</a
+            >
           </li>
         </ul>
       </div>

@@ -38,6 +38,7 @@
         x-data="{ omni: '', text: false, list: false }"
       >
         <!-- TODO: consider persisting the contents of this input -->
+        <!-- TODO: undo list of input procs -->
         <textarea
           placeholder="You can do anything in the omni bar—anything at all..."
           class="w-full pl-2 p-1 bg-input text-input focus-2 boxshadow-lg resize-none"
@@ -266,17 +267,26 @@
 
           <hr class="mt-4 mb-2" />
 
-          <li class="m-1">mkit ver <span x-text="__GIT_VERSION__" /></li>
+          <li class="m-1">
+            mkit ver
+            <a
+              class="text-max"
+              x-bind:href="'https://github.com/nytopop/mkit/tree/' + __GIT_VERSION_CLEAN__"
+              x-text="__GIT_VERSION__"
+            ></a>
+          </li>
 
           <li class="m-1">
-            by Eric Izoita (<a href="mailto:ericizoita@gmail.com"
+            by Eric Izoita (<a
+              class="text-max"
+              href="mailto:ericizoita@gmail.com"
               >ericizoita@gmail.com</a
             >)
           </li>
 
           <li class="m-1">
             under
-            <a href="https://www.gnu.org/licenses/agpl-3.0.txt"
+            <a class="text-max" href="https://www.gnu.org/licenses/agpl-3.0.txt"
               >AGPL-3.0-or-later</a
             >
           </li>

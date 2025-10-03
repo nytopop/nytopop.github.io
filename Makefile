@@ -1,13 +1,15 @@
 .PHONY: preview dev clean gpt-oss-20b granite4-7b
 
-dist: clean src/version.ts
+node_modules:
 	npm install
+
+dist: node_modules clean src/version.ts
 	npm run build
 
 preview: dist
 	npm run preview
 
-dev: clean src/version.ts
+dev: node_modules clean src/version.ts
 	npm run dev
 
 clean:

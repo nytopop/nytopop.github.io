@@ -1,19 +1,19 @@
-.PHONY: preview dev clean gpt-oss-20b granite4-7b
+.PHONY: preview dev clean src/version.ts gpt-oss-20b granite4-7b
 
-node_modules:
-	npm install
-
-dist: node_modules clean src/version.ts
+dist: node_modules src/version.ts
 	npm run build
 
 preview: dist
 	npm run preview
 
-dev: node_modules clean src/version.ts
+dev: node_modules src/version.ts
 	npm run dev
 
-clean:
-	rm -rf src/version.ts dist
+clean: clean
+	rm -rf src/version.ts dist node_modules
+
+node_modules:
+	npm install
 
 src/version.ts:
 	echo 'export const VERSION: string = "$(shell git describe --always --dirty)";' > src/version.ts

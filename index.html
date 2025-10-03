@@ -53,7 +53,6 @@
         </textarea>
 
         <!-- TODO: actions need +/- nice buttons to generate preference data -->
-
         <div
           class="text-neutral-500 dark:text-neutral-400"
           x-show="text || list"
@@ -68,7 +67,7 @@
             x-on:focus="list = true; autosize($refs.bar)"
             x-on:blur="list = false; collapse($refs.bar)"
           >
-            <strong>1) </strong>Breaking news!!!
+            placeholder 1
           </div>
 
           <div
@@ -80,8 +79,7 @@
             x-on:focus="list = true; autosize($refs.bar)"
             x-on:blur="list = false; collapse($refs.bar)"
           >
-            <strong>2) </strong>Some bullshit happened and it's NOT what you
-            think!
+            placeholder 2
           </div>
 
           <div
@@ -93,7 +91,7 @@
             x-on:focus="list = true; autosize($refs.bar)"
             x-on:blur="list = false; collapse($refs.bar)"
           >
-            <strong>3) </strong>You'll NEVER guess what happens next!?
+            placeholder 3
           </div>
         </div>
       </div>
@@ -268,18 +266,22 @@
           <li class="m-1">
             mkit ver
             <a
+              title="host it yourself"
               class="text-max"
-              x-bind:href="'https://github.com/nytopop/mkit/tree/' + __GIT_VERSION_CLEAN__"
+              x-bind:href="'https://git.sr.ht/~nytopop/mkit/commit/' + __GIT_VERSION_CLEAN__"
               x-text="__GIT_VERSION__"
             ></a>
           </li>
 
           <li class="m-1">
-            by Eric Izoita (<a
+            by
+            <span title="not an AI">Eric Izoita</span>
+            <a
               class="text-max"
               href="mailto:ericizoita@gmail.com"
+              title="we love emails"
               >ericizoita@gmail.com</a
-            >)
+            >
           </li>
 
           <li class="m-1">
@@ -288,6 +290,14 @@
               >AGPL-3.0-or-later</a
             >
           </li>
+
+          <!-- TODO: errata -->
+          <!-- <li class="m-1"> -->
+          <!-- report -->
+          <!-- <a class="text-max" href="">bugs</a> -->
+          <!-- / request -->
+          <!-- <a class="text-max" href="">features</a> -->
+          <!-- </li> -->
         </ul>
       </div>
 

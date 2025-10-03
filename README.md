@@ -1,5 +1,5 @@
 # mkit
-A bring your own API inference frontend.
+A bring your own model (BYOM) inference frontend.
 
 
 # building

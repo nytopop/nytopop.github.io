@@ -263,13 +263,13 @@
 
           <hr class="mt-4 mb-2" />
 
-          <li class="m-1">
+          <li class="m-1" x-data="git">
             mkit ver
             <a
-              title="host it yourself"
+              title="the source"
               class="text-max"
-              x-bind:href="'https://git.sr.ht/~nytopop/mkit/commit/' + __GIT_VERSION_CLEAN__"
-              x-text="__GIT_VERSION__"
+              x-bind:href="'https://git.sr.ht/~nytopop/mkit/commit/' + versionclean"
+              x-text="version"
             ></a>
           </li>
 

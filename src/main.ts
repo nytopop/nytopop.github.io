@@ -15,6 +15,7 @@
  */
 import "./style.css";
 import { App } from "./app.ts";
+import { VERSION, VERSION_CLEAN } from "./version.ts";
 
 import Alpine from "alpinejs";
 import persist from "@alpinejs/persist";
@@ -24,5 +25,9 @@ declare const window: any;
 window.Alpine = Alpine;
 
 Alpine.plugin(persist);
+
 Alpine.data("app", () => new App());
+
+Alpine.data("git", () => ({ version: VERSION, versionclean: VERSION_CLEAN }));
+
 Alpine.start();

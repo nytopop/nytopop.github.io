@@ -25,7 +25,7 @@ light text (faint -> bold): 500 -> 800 -> 950
 }
 
 .pyramid {
-  background-image: url("pyramid.png");
+  background-image: url("/pyramid.png");
 }
 
 .bg-selection {

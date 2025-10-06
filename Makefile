@@ -30,5 +30,8 @@ ARGS := --gpu-memory-utilization 0.8
 gpt-oss-20b: .venv
 	$(VLLM) serve openai/gpt-oss-20b $(ARGS) --tool-call-parser openai --reasoning-parser openai_gptoss
 
+granite4-3b: .venv
+	$(VLLM) serve ibm-granite/granite-4.0-h-micro $(ARGS) --tool-call-parser hermes --enable-auto-tool-choice
+
 granite4-7b: .venv
 	$(VLLM) serve ibm-granite/granite-4.0-h-tiny $(ARGS) --tool-call-parser hermes --enable-auto-tool-choice

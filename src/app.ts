@@ -27,8 +27,17 @@ export class App {
   rolemodel = Alpine.$persist(null);
 
   // state
+  docwidth: number = 0;
   configmodal: boolean = false;
   actions: Action[] = [];
+  tokenusage: number = 4103209; // TODO: actually tho
+
+  lorem(n: number): string {
+    const lorem: string =
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+
+    return lorem.repeat(n);
+  }
 
   // TODO: context
   // TODO: store usage stats on tokens, steps, etc in persistent storage
@@ -71,31 +80,18 @@ export class App {
     }
   }
 
-  // TODO: write display logic => fill
-  async omnifunc(omni: string): Promise<void> {
-    // TODO: write the omnifunc???
-    // [x] decide how to score action selections in a common reference frame [reranking task]
-    //
-    // [ ] figure out action generators over inputs ('here are possible actions in this context')
-    //     ex: a 'config' builtin that does literal matching
-    //
-    // [ ] default task for reranking: coherent extrapolated volition (CEV) of input sender
-    //     note: we want several (and we should permit 'compound' tasks (ux: display it somehow idk))
-    //
-    // [ ] figure out interface for how either of the above are applied (interface?)
-    //
-    // roughly, we need to produce a list of at most K potential actions based on input and ctx state.
-
-    // pipeline so far: input ~> fanout ~> merge + rerank ~> top k
-    console.log(omni);
+  async omnifunc(input: string): Promise<void> {
+    // input ~> fanout ~> merge + rerank ~> top k
+    console.log(input);
+    console.log("input.length =", input.length);
   }
 
-  doaction(): void {
-    // TODO: lookup the action in our persist list -> do it
-    // (action: string)
-  }
+  // TODO: write the code
+  //       ↵: do and kill buffer
+  // shift ↵: do but keep buffer and leave sel open (lets you keep picking)
+  doaction(): void {}
 }
 
 interface Action {
-  show: string; //
+  show: string;
 }

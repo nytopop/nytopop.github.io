@@ -19,12 +19,16 @@ import { VERSION, VERSION_CLEAN } from "./version.ts";
 
 import Alpine from "alpinejs";
 import persist from "@alpinejs/persist";
+import resize from "@alpinejs/resize";
+import anchor from "@alpinejs/anchor";
 
 declare const window: any;
 
 window.Alpine = Alpine;
 
 Alpine.plugin(persist);
+Alpine.plugin(resize);
+Alpine.plugin(anchor);
 
 Alpine.data("app", () => new App());
 

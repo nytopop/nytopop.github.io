@@ -36,6 +36,10 @@ light text (faint -> bold): 500 -> 800 -> 950
   @apply bg-stone-200 dark:bg-stone-900;
 }
 
+.bg-child-2 {
+  @apply bg-stone-50 dark:bg-stone-950;
+}
+
 .bg-input {
   @apply bg-stone-100 dark:bg-stone-700;
 }
@@ -68,4 +72,12 @@ light text (faint -> bold): 500 -> 800 -> 950
 
 .focus-2 {
   @apply focus:outline-none focus:ring-2 focus:ring-orange-500;
+}
+
+.be-rtl {
+  direction: rtl;
+}
+
+.be-ltr {
+  direction: ltr;
 }

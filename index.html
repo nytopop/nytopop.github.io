@@ -15,7 +15,7 @@
   </head>
 
   <body
-    class="bg-main bg-selection font-mono overflow-y-hidden"
+    class="bg-main bg-selection font-sans overflow-y-hidden"
     x-data="app"
     x-resize.document="docwidth = $width"
   >
@@ -111,8 +111,6 @@
       </div>
     </div>
 
-    <!-- TODO: with shift held, hovering over UI elements should display floating help windows -->
-
     <!-- context content -->
     <div class="flex max-h-screen">
       <!-- track1 -->
@@ -131,7 +129,6 @@
 
       <!-- track0 -->
       <div class="flex-grow flex overflow-y-auto" tabindex="-1" x-ref="track0">
-        <!-- content -->
         <div class="ml-0.5 mr-3 w-xl">
           <!-- input spacer -->
           <div class="mt-17"></div>
@@ -144,10 +141,12 @@
             x-cloak
           >
             <!-- spacer (TODO: render graphic of a tree/plant) -->
-            <div class="mr-0.5 flex-grow bg-child text-min boxshadow-lg"></div>
+            <div
+              class="mr-0.5 flex-grow boxshadow-lg bg-stone-800 pyramid"
+            ></div>
 
             <ul
-              class="ml-0.5 flex-shrink bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden"
+              class="ml-0.5 flex-shrink bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden font-mono"
             >
               <li class="cursor-default">
                 <span

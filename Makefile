@@ -9,11 +9,11 @@ preview: dist
 dev: node_modules src/version.ts
 	npm run dev
 
-clean: clean
+clean:
 	rm -rf src/version.ts dist node_modules
 
 node_modules:
-	npm install
+	npm ci
 
 src/version.ts:
 	echo 'export const VERSION: string = "$(shell git describe --always --dirty)";' > src/version.ts

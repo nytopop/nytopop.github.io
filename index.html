@@ -37,17 +37,16 @@
 
         <!-- action select -->
         <div
-          class="flex-auto max-w-3xl max-h-screen backdrop-blur-xs"
-          x-data="{ input: '', text: false, list: false }"
+          class="flex-auto max-w-3xl max-h-screen"
+          x-data="{ input: '', focused: false }"
         >
-          <div class="flex flex-col h-full">
+          <div class="flex flex-col h-full font-mono relative">
             <textarea
-              placeholder="You can do anything in the omni bar—anything at all..."
               class="flex-grow p-1 bg-input text-input focus-2 boxshadow-lg resize-none pointer-events-auto relative"
               x-model="input"
               x-on:keydown.escape="$el.blur()"
-              x-on:focus="text = true; autosize($el)"
-              x-on:blur="text = false; collapse($el)"
+              x-on:focus="focused = true; autosize($el); await omnifunc(input)"
+              x-on:blur="focused = false; collapse($el)"
               x-on:input="autosize($el)"
               x-on:input.debounce.200ms="await omnifunc(input)"
               x-ref="bar"
@@ -55,41 +54,39 @@
             </textarea>
 
             <span
-              class="text-sm text-min pointer-events-none p-0.5"
+              class="text-xs text-min pointer-events-none absolute top-1.5 right-1"
+              x-show="input.length == 0"
+              >cfg
+            </span>
+
+            <span
+              class="text-xs text-min pointer-events-none px-1"
               x-text="tokenusage"
               x-anchor.bottom-end.offset.-20="$refs.bar"
             >
             </span>
 
             <div
-              class="flex flex-col mb-1 text-min pointer-events-auto"
-              x-show="text || list"
+              class="flex flex-col mb-1 pointer-events-auto"
+              x-show="focused"
               x-transition
               x-cloak
             >
-              <div
-                class="flex-grow mt-2 m-1 p-1 bg-child-2 boxshadow-lg focus-1"
-                tabindex="0"
-                x-on:click="$el.blur()"
-                x-on:keydown.enter="$el.blur()"
-                x-on:keydown.escape="$refs.bar.focus()"
-                x-on:focus="list = true; autosize($refs.bar)"
-                x-on:blur="list = false; collapse($refs.bar)"
-              >
-                RFC: bla bla bla
-              </div>
+              <div class="m-0.5"></div>
 
-              <div
-                class="flex-grow mt-1 m-1 p-1 bg-child-2 boxshadow-lg focus-1"
-                tabindex="0"
-                x-on:click="$el.blur()"
-                x-on:keydown.enter="$el.blur()"
-                x-on:keydown.escape="$refs.bar.focus()"
-                x-on:focus="list = true; autosize($refs.bar)"
-                x-on:blur="list = false; collapse($refs.bar)"
-              >
-                EXE: do x y z bla bla
-              </div>
+              <template x-for="(action, ix) in actions">
+                <div
+                  class="m-1 px-1 bg-child-2 rounded-xs boxshadow-lg focus-2 ring-2 text-min cursor-pointer"
+                  tabindex="0"
+                  x-on:click="$el.blur(); doaction(ix)"
+                  x-on:keydown.enter="$el.blur(); doaction(ix)"
+                  x-on:keydown.escape="$refs.bar.focus()"
+                  x-on:focus="focused = true; autosize($refs.bar)"
+                  x-on:blur="focused = false; collapse($refs.bar)"
+                >
+                  <span class="text-soft" x-text="action.show"></span>
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -121,7 +118,7 @@
 
           <!-- TODO: fill w/ content from context -->
           <div
-            class="my-2 bg-child p-1 boxshadow-lg text-min hyphens-auto text-justify"
+            class="my-2 bg-child p-1 boxshadow-lg text-soft hyphens-auto text-justify"
             x-text="lorem(48)"
           ></div>
         </div>
@@ -237,7 +234,7 @@
               </li>
 
               <li class="m-1 cursor-default">
-                AI Slop:
+                Slop:
                 <span
                   class="cursor-pointer transition-all duration-25 hover:font-bold"
                   x-bind:class="{ 'text-orange-500': aislop == 'suppress' }"
@@ -322,7 +319,7 @@
 
           <!-- TODO: fill w/ content from context -->
           <div
-            class="my-2 bg-child p-1 boxshadow-lg text-min hyphens-auto text-justify"
+            class="my-2 bg-child p-1 boxshadow-lg text-soft hyphens-auto text-justify"
             x-text="lorem(16)"
           ></div>
         </div>

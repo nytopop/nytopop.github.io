@@ -33,30 +33,32 @@ light text (faint -> bold): 500 -> 800 -> 950
 }
 
 .bg-main {
-  @apply bg-stone-300 dark:bg-stone-800;
+  @apply bg-stone-300 dark:bg-stone-700;
 }
 
 .bg-child {
-  @apply bg-stone-200 dark:bg-stone-900;
+  @apply bg-stone-200 dark:bg-stone-800;
 }
 
 .bg-child-2 {
-  @apply bg-stone-50 dark:bg-stone-950;
+  @apply bg-stone-50 dark:bg-stone-900;
 }
 
 .bg-input {
-  @apply bg-stone-100 dark:bg-stone-700;
-}
-
-.text-input {
-  @apply text-neutral-800 dark:text-neutral-100;
+  @apply bg-stone-100 dark:bg-neutral-600;
 }
 
 .text-max {
   @apply text-neutral-950 dark:text-neutral-50;
 }
 
-/* TODO: more text variants? */
+.text-input {
+  @apply text-neutral-800 dark:text-neutral-100;
+}
+
+.text-soft {
+  @apply text-neutral-600 dark:text-neutral-300;
+}
 
 .text-min {
   @apply text-neutral-500 dark:text-neutral-400;

@@ -148,9 +148,9 @@
             <ul
               class="ml-0.5 flex-shrink bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden font-mono"
             >
-              <li class="cursor-default">
+              <li>
                 <span
-                  class="select-none"
+                  class="select-none cursor-pointer"
                   x-data="{ status: 'unknown' }"
                   x-init="status = await apistatus(); $watch('apiurl, apikey, model', () => { status = 'unknown'; $dispatch('argupdate'); });"
                   x-on:argupdate.debounce.750ms="status = await apistatus()"
@@ -163,7 +163,9 @@
               }"
                 ></span>
 
-                <span class="text-lg underline text-max">Inference</span>
+                <span class="text-lg underline text-max cursor-default"
+                  >Inference</span
+                >
               </li>
 
               <li class="m-1">

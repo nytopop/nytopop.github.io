@@ -37,57 +37,56 @@
 
         <!-- action select -->
         <div
-          class="flex-auto max-w-3xl max-h-screen"
+          class="flex-auto max-w-3xl max-h-screen flex flex-col font-mono relative"
           x-data="{ input: '', focused: false }"
         >
-          <div class="flex flex-col h-full font-mono relative">
-            <textarea
-              class="flex-grow p-1 bg-input text-input focus-2 boxshadow-lg resize-none pointer-events-auto relative"
-              x-model="input"
-              x-on:keydown.escape="$el.blur()"
-              x-on:focus="focused = true; autosize($el); await omnifunc(input)"
-              x-on:blur="focused = false; collapse($el)"
-              x-on:input="autosize($el)"
-              x-on:input.debounce.200ms="await omnifunc(input)"
-              x-ref="bar"
-            >
-            </textarea>
+          <textarea
+            class="z-1 flex-grow p-1 bg-input text-input focus-2 boxshadow-lg resize-none pointer-events-auto relative"
+            x-model="input"
+            x-on:keydown.escape="$el.blur()"
+            x-on:focus="focused = true; autosize($el); await omnifunc(input)"
+            x-on:blur="focused = false; collapse($el)"
+            x-on:input="autosize($el)"
+            x-on:input.debounce.200ms="await omnifunc(input)"
+            x-ref="bar"
+          >
+          </textarea>
 
-            <span
-              class="text-xs text-min pointer-events-none absolute top-1.5 right-1"
-              x-show="input.length == 0"
-              >cfg
-            </span>
+          <span
+            class="text-xs pointer-events-none absolute top-1.5 right-1"
+            x-bind:class="configmodal ? 'text-orange-500' : 'text-min' "
+            x-show="input.length == 0"
+            >cfg
+          </span>
 
-            <span
-              class="text-xs text-min pointer-events-none px-1"
-              x-text="tokenusage"
-              x-anchor.bottom-end.offset.-20="$refs.bar"
-            >
-            </span>
+          <span
+            class="text-xs text-min pointer-events-none px-1"
+            x-text="tokenusage"
+            x-anchor.bottom-end.offset.-20="$refs.bar"
+          >
+          </span>
 
-            <div
-              class="flex flex-col mb-1 pointer-events-auto"
-              x-show="focused"
-              x-transition
-              x-cloak
-            >
-              <div class="m-0.5"></div>
+          <div
+            class="z-2 flex flex-col mb-1 pointer-events-auto"
+            x-show="focused"
+            x-transition
+            x-cloak
+          >
+            <div class="m-0.5"></div>
 
-              <template x-for="(action, ix) in actions">
-                <div
-                  class="m-1 px-1 bg-child-2 rounded-xs boxshadow-lg focus-2 ring-2 text-min cursor-pointer"
-                  tabindex="0"
-                  x-on:click="$el.blur(); doaction(ix)"
-                  x-on:keydown.enter="$el.blur(); doaction(ix)"
-                  x-on:keydown.escape="$refs.bar.focus()"
-                  x-on:focus="focused = true; autosize($refs.bar)"
-                  x-on:blur="focused = false; collapse($refs.bar)"
-                >
-                  <span class="text-soft" x-text="action.show"></span>
-                </div>
-              </template>
-            </div>
+            <template x-for="(action, ix) in actions">
+              <div
+                class="m-1 px-1 bg-child-2 rounded-xs boxshadow-lg focus-2 ring-2 text-min cursor-pointer"
+                tabindex="0"
+                x-on:click="$el.blur(); doaction(ix)"
+                x-on:keydown.enter="$el.blur(); doaction(ix)"
+                x-on:keydown.escape="$refs.bar.focus()"
+                x-on:focus="focused = true; autosize($refs.bar)"
+                x-on:blur="focused = false; collapse($refs.bar)"
+              >
+                <span class="text-soft" x-text="action.show"></span>
+              </div>
+            </template>
           </div>
         </div>
 

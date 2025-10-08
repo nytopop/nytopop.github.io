@@ -27,10 +27,10 @@ export class App {
   rolemodel = Alpine.$persist(null);
 
   // state
-  docwidth: number = 0;
+  wide: boolean = false;
   configmodal: boolean = false;
+  ntokens: number = 4103209; // TODO: actually tho
   actions: Action[] = [];
-  tokenusage: number = 4103209; // TODO: actually tho
 
   lorem(n: number): string {
     const lorem: string =
@@ -69,7 +69,9 @@ export class App {
 
       if (
         this.model &&
-        !models.data.some((m) => m.id === (this.model as unknown as string))
+        !models.data.some(
+          (m: { id: string }) => m.id === (this.model as unknown as string),
+        )
       ) {
         return "unknown model";
       }

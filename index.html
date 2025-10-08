@@ -17,7 +17,7 @@
   <body
     class="bg-main bg-selection font-sans overflow-y-hidden"
     x-data="app"
-    x-resize.document="docwidth = $width"
+    x-resize.document="wide = $width > 820"
   >
     <div class="max-h-screen w-full fixed mt-1 pointer-events-none">
       <div class="flex justify-center">
@@ -61,7 +61,7 @@
 
           <span
             class="text-xs text-min pointer-events-none px-1"
-            x-text="tokenusage"
+            x-text="ntokens"
             x-anchor.bottom-end.offset.-20="$refs.bar"
           ></span>
 
@@ -110,7 +110,7 @@
     <div class="flex max-h-screen">
       <!-- track1 -->
       <div class="flex-grow flex overflow-y-auto be-rtl" tabindex="-1">
-        <div class="ml-3 mr-0.5 w-xl be-ltr" x-show="docwidth > 820">
+        <div class="ml-3 mr-0.5 w-xl be-ltr" x-show="wide">
           <!-- input spacer -->
           <div class="mt-17"></div>
 
@@ -124,7 +124,7 @@
 
       <!-- track0 -->
       <div class="flex-grow flex overflow-y-auto" tabindex="-1" x-ref="track0">
-        <div class="ml-0.5 mr-3 w-xl">
+        <div class="ml-0.5 mr-3" x-bind:class="wide ? 'w-xl' : 'w-2xl'">
           <!-- input spacer -->
           <div class="mt-17"></div>
 

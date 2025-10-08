@@ -41,7 +41,7 @@
           x-data="{ input: '', focused: false }"
         >
           <textarea
-            class="z-1 flex-grow p-1 bg-input text-input focus-2 boxshadow-lg resize-none pointer-events-auto relative"
+            class="z-0 flex-grow p-1 bg-input text-input focus-2 boxshadow-lg resize-none pointer-events-auto relative"
             x-model="input"
             x-on:keydown.escape="$el.blur()"
             x-on:focus="focused = true; autosize($el); await omnifunc(input)"
@@ -56,18 +56,17 @@
             class="text-xs pointer-events-none absolute top-1.5 right-1"
             x-bind:class="configmodal ? 'text-orange-500' : 'text-min' "
             x-show="input.length == 0"
-            >cfg
-          </span>
+            >cfg</span
+          >
 
           <span
             class="text-xs text-min pointer-events-none px-1"
             x-text="tokenusage"
             x-anchor.bottom-end.offset.-20="$refs.bar"
-          >
-          </span>
+          ></span>
 
           <div
-            class="z-2 flex flex-col mb-1 pointer-events-auto"
+            class="z-1 flex flex-col mb-1 pointer-events-auto"
             x-show="focused"
             x-transition
             x-cloak

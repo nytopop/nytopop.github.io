@@ -168,179 +168,187 @@
               </div>
             </div>
 
-            <ul
-              class="ml-0.5 flex-shrink bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden font-mono"
-            >
-              <li>
-                <span
-                  class="select-none cursor-pointer"
-                  x-data="{ status: 'unknown' }"
-                  x-init="status = await apistatus(); $watch('apiurl, apikey, model', () => { status = 'unknown'; $dispatch('argupdate'); });"
-                  x-on:argupdate.debounce.750ms="status = await apistatus()"
-                  x-on:click="status = await apistatus()"
-                  x-text="status"
-                  x-bind:class="{
+            <div class="ml-0.5 flex flex-col">
+              <!-- top list -->
+              <ul
+                class="mb-1 bg-child text-min text-right p-1 boxshadow-sm overflow-x-hidden font-mono"
+              >
+                <li>
+                  <span
+                    class="select-none cursor-pointer"
+                    x-data="{ status: 'unknown' }"
+                    x-init="status = await apistatus(); $watch('apiurl, apikey, model', () => { status = 'unknown'; $dispatch('argupdate'); });"
+                    x-on:argupdate.debounce.750ms="status = await apistatus()"
+                    x-on:click="status = await apistatus()"
+                    x-text="status"
+                    x-bind:class="{
                 'animate-ping': status === 'unknown',
                 'text-emerald-600': status === 'ok',
                 'text-red-500': status !== 'unknown' && status !== 'ok',
               }"
-                ></span>
+                  ></span>
 
-                <span class="text-lg underline text-max cursor-default"
-                  >Inference</span
-                >
-              </li>
+                  <span class="text-lg underline text-max cursor-default"
+                    >Inference</span
+                  >
+                </li>
 
-              <li class="m-1">
-                <label for="apiurl">API URL</label>
-                <input
-                  id="apiurl"
-                  type="url"
-                  placeholder="https://api.openai.com/v1/"
-                  class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
-                  x-model="apiurl"
-                />
-              </li>
+                <li class="m-1">
+                  <label for="apiurl">API URL</label>
+                  <input
+                    id="apiurl"
+                    type="url"
+                    placeholder="https://api.openai.com/v1/"
+                    class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
+                    x-model="apiurl"
+                  />
+                </li>
 
-              <li class="m-1">
-                <label for="apikey">API Key</label>
-                <input
-                  id="apikey"
-                  type="password"
-                  class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
-                  x-model="apikey"
-                />
-              </li>
+                <li class="m-1">
+                  <label for="apikey">API Key</label>
+                  <input
+                    id="apikey"
+                    type="password"
+                    class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
+                    x-model="apikey"
+                  />
+                </li>
 
-              <li class="m-1">
-                <label for="model">Model </label>
-                <input
-                  id="model"
-                  type="text"
-                  placeholder="default"
-                  class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
-                  x-model="model"
-                />
-              </li>
+                <li class="m-1">
+                  <label for="model">Model </label>
+                  <input
+                    id="model"
+                    type="text"
+                    placeholder="default"
+                    class="p-1 w-72 bg-input text-input focus-2 boxshadow-sm"
+                    x-model="model"
+                  />
+                </li>
 
-              <li class="text-lg underline text-max cursor-default">Tweaks</li>
+                <li class="text-lg underline text-max cursor-default">
+                  Tweaks
+                </li>
 
-              <li class="m-1 cursor-default">
-                Glazing:
-                <span
-                  class="cursor-pointer transition-all duration-25 hover:font-bold"
-                  x-bind:class="{ 'text-orange-500': glazing == 'suppress' }"
-                  x-on:click="glazing === 'suppress' ? glazing = null : glazing = 'suppress'"
-                  >suppress</span
-                >
-                /
-                <span
-                  class="cursor-pointer transition-all duration-25 hover:font-bold"
-                  x-bind:class="{ 'text-orange-500': glazing == 'enforce' }"
-                  x-on:click="glazing === 'enforce' ? glazing = null : glazing = 'enforce'"
-                  >enforce</span
-                >
-              </li>
+                <li class="m-1 cursor-default">
+                  Glazing:
+                  <span
+                    class="cursor-pointer transition-all duration-25 hover:font-bold"
+                    x-bind:class="{ 'text-orange-500': glazing == 'suppress' }"
+                    x-on:click="glazing === 'suppress' ? glazing = null : glazing = 'suppress'"
+                    >suppress</span
+                  >
+                  /
+                  <span
+                    class="cursor-pointer transition-all duration-25 hover:font-bold"
+                    x-bind:class="{ 'text-orange-500': glazing == 'enforce' }"
+                    x-on:click="glazing === 'enforce' ? glazing = null : glazing = 'enforce'"
+                    >enforce</span
+                  >
+                </li>
 
-              <li class="m-1 cursor-default">
-                Deception:
-                <span
-                  class="cursor-pointer transition-all duration-25 hover:font-bold"
-                  x-bind:class="{ 'text-orange-500': deception == 'suppress' }"
-                  x-on:click="deception === 'suppress' ? deception = null : deception = 'suppress'"
-                  >suppress</span
-                >
-                /
-                <span
-                  class="cursor-pointer transition-all duration-25 hover:font-bold"
-                  x-bind:class="{ 'text-orange-500': deception == 'enforce' }"
-                  x-on:click="deception === 'enforce' ? deception = null :  deception = 'enforce'"
-                  >enforce</span
-                >
-              </li>
+                <li class="m-1 cursor-default">
+                  Deception:
+                  <span
+                    class="cursor-pointer transition-all duration-25 hover:font-bold"
+                    x-bind:class="{ 'text-orange-500': deception == 'suppress' }"
+                    x-on:click="deception === 'suppress' ? deception = null : deception = 'suppress'"
+                    >suppress</span
+                  >
+                  /
+                  <span
+                    class="cursor-pointer transition-all duration-25 hover:font-bold"
+                    x-bind:class="{ 'text-orange-500': deception == 'enforce' }"
+                    x-on:click="deception === 'enforce' ? deception = null :  deception = 'enforce'"
+                    >enforce</span
+                  >
+                </li>
 
-              <li class="m-1 cursor-default">
-                Slop:
-                <span
-                  class="cursor-pointer transition-all duration-25 hover:font-bold"
-                  x-bind:class="{ 'text-orange-500': aislop == 'suppress' }"
-                  x-on:click="aislop === 'suppress' ? aislop = null : aislop = 'suppress'"
-                  >suppress</span
-                >
-                /
-                <span
-                  class="cursor-pointer transition-all duration-25 hover:font-bold"
-                  x-bind:class="{ 'text-orange-500': aislop == 'enforce' }"
-                  x-on:click="aislop === 'enforce' ? aislop = null : aislop = 'enforce'"
-                  >enforce</span
-                >
-              </li>
+                <li class="m-1 cursor-default">
+                  Slop:
+                  <span
+                    class="cursor-pointer transition-all duration-25 hover:font-bold"
+                    x-bind:class="{ 'text-orange-500': slop == 'suppress' }"
+                    x-on:click="slop === 'suppress' ? slop = null : slop = 'suppress'"
+                    >suppress</span
+                  >
+                  /
+                  <span
+                    class="cursor-pointer transition-all duration-25 hover:font-bold"
+                    x-bind:class="{ 'text-orange-500': slop == 'enforce' }"
+                    x-on:click="slop === 'enforce' ? slop = null : slop = 'enforce'"
+                    >enforce</span
+                  >
+                </li>
 
-              <li class="m-1">
-                <label
-                  for="rolemodel"
-                  x-bind:class="{ 'text-orange-500': rolemodel }"
-                  >Would</label
-                >
+                <li class="m-1">
+                  <label
+                    for="rolemodel"
+                    x-bind:class="{ 'text-orange-500': rolemodel }"
+                    >Would</label
+                  >
 
-                <input
-                  id="rolemodel"
-                  type="text"
-                  class="px-1 bg-input text-input focus-2 boxshadow-sm"
-                  x-model="rolemodel"
-                />
+                  <input
+                    id="rolemodel"
+                    type="text"
+                    class="px-1 bg-input text-input focus-2 boxshadow-sm"
+                    x-model="rolemodel"
+                  />
 
-                <label
-                  for="rolemodel"
-                  x-bind:class="{ 'text-orange-500': rolemodel }"
-                  >do that?</label
-                >
-              </li>
+                  <label
+                    for="rolemodel"
+                    x-bind:class="{ 'text-orange-500': rolemodel }"
+                    >do that?</label
+                  >
+                </li>
+              </ul>
 
-              <hr class="mt-4 mb-2" />
+              <!-- bottom list -->
+              <ul
+                class="bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden font-mono"
+              >
+                <li class="m-1">
+                  mkit ver
+                  <a
+                    title="the source"
+                    class="text-max"
+                    x-bind:href="'https://git.sr.ht/~nytopop/mkit/commit/' + $store.version.clean"
+                    x-text="$store.version.raw"
+                  ></a>
+                </li>
 
-              <li class="m-1" x-data="git">
-                mkit ver
-                <a
-                  title="the source"
-                  class="text-max"
-                  x-bind:href="'https://git.sr.ht/~nytopop/mkit/commit/' + versionclean"
-                  x-text="version"
-                ></a>
-              </li>
+                <li class="m-1">
+                  by
+                  <span title="not an AI">Eric Izoita</span>
+                  <a
+                    class="text-max"
+                    href="mailto:ericizoita@gmail.com"
+                    title="we love email"
+                    >ericizoita@gmail.com</a
+                  >
+                </li>
 
-              <li class="m-1">
-                by
-                <span title="not an AI">Eric Izoita</span>
-                <a
-                  class="text-max"
-                  href="mailto:ericizoita@gmail.com"
-                  title="we love email"
-                  >ericizoita@gmail.com</a
-                >
-              </li>
+                <li class="m-1">
+                  under
+                  <a
+                    class="text-max"
+                    href="https://www.gnu.org/licenses/agpl-3.0.txt"
+                    >AGPL-3.0-or-later</a
+                  >
+                </li>
 
-              <li class="m-1">
-                under
-                <a
-                  class="text-max"
-                  href="https://www.gnu.org/licenses/agpl-3.0.txt"
-                  >AGPL-3.0-or-later</a
-                >
-              </li>
-
-              <li class="m-1">
-                <a class="text-max" href="https://todo.sr.ht/~nytopop/mkit"
-                  >bugs</a
-                >
-                |
-                <a
-                  class="text-max"
-                  href="https://lists.sr.ht/~nytopop/mkit-devel"
-                  >discuss</a
-                >
-              </li>
-            </ul>
+                <li class="m-1">
+                  <a class="text-max" href="https://todo.sr.ht/~nytopop/mkit"
+                    >bugs</a
+                  >
+                  |
+                  <a
+                    class="text-max"
+                    href="https://lists.sr.ht/~nytopop/mkit-devel"
+                    >discuss</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
 
           <!-- TODO: fill w/ content from context -->

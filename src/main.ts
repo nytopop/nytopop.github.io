@@ -30,8 +30,8 @@ Alpine.plugin(persist);
 Alpine.plugin(resize);
 Alpine.plugin(anchor);
 
-Alpine.data("app", () => new App());
+Alpine.store("version", { raw: VERSION, clean: VERSION_CLEAN });
 
-Alpine.data("git", () => ({ version: VERSION, versionclean: VERSION_CLEAN }));
+Alpine.data("app", () => new App());
 
 Alpine.start();

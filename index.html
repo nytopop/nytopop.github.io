@@ -1,8 +1,9 @@
 <!doctype html>
 <html
   lang="en"
-  x-data="{ theme: $persist('system') }"
+  x-data="{ theme: $persist('system'), wide: false, configmodal: false, rand: Math.random() }"
   x-bind:class="{'dark': theme === 'dark' || (theme === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
+  x-resize.document="wide = $width > 820"
 >
   <head>
     <meta charset="UTF-8" />
@@ -14,11 +15,7 @@
     <title>mkit</title>
   </head>
 
-  <body
-    class="bg-main bg-selection font-sans overflow-y-hidden"
-    x-data="app"
-    x-resize.document="wide = $width > 820"
-  >
+  <body class="bg-main bg-selection font-sans overflow-y-hidden" x-data="app">
     <div class="max-h-screen w-full fixed mt-1 pointer-events-none">
       <div class="flex justify-center">
         <!-- L buttons -->
@@ -135,10 +132,41 @@
             x-transition
             x-cloak
           >
-            <!-- spacer (TODO: render graphic of a tree/plant) -->
             <div
-              class="mr-0.5 flex-grow boxshadow-lg bg-stone-800 pyramid"
-            ></div>
+              class="mr-0.5 flex-1 boxshadow-lg bg-child -z-1 relative max-h-full flex flex-col"
+            >
+              <!-- petal animation -->
+              <div class="absolute sakura h-full w-full overflow-hidden">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="flex-grow"></div>
+
+              <!-- aphorisms -->
+              <div
+                class="mb-1 mr-1 text-sakura text-xs font-mono text-right cursor-text"
+              >
+                <span x-show="rand <= 0.5">
+                  to our era of Algorithm—that most abominable Machine—so
+                  assiduously attending our Attentions
+                </span>
+
+                <span x-show="rand > 0.5">
+                  of course it's true,<br />says the preacher man.
+                </span>
+              </div>
+            </div>
 
             <ul
               class="ml-0.5 flex-shrink bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden font-mono"

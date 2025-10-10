@@ -17,18 +17,16 @@ import Alpine from "alpinejs";
 import OpenAI from "openai";
 
 export class App {
-  // config
+  // persistent config
   apiurl = Alpine.$persist(null);
   apikey = Alpine.$persist(null);
   model = Alpine.$persist(null);
   glazing = Alpine.$persist("suppress");
   deception = Alpine.$persist("suppress");
-  aislop = Alpine.$persist("suppress");
+  slop = Alpine.$persist("suppress");
   rolemodel = Alpine.$persist(null);
 
   // state
-  wide: boolean = false;
-  configmodal: boolean = false;
   ntokens: number = 4103209; // TODO: actually tho
   actions: Action[] = [];
 

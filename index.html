@@ -1,7 +1,11 @@
 <!doctype html>
 <html
   lang="en"
-  x-data="{ theme: $persist('system'), wide: false, configmodal: false, rand: Math.random() }"
+  x-data="{ theme: $persist('system')
+          , wide: false
+          , configmodal: false
+          , quote: Math.floor(Math.random() * 2)
+          }"
   x-bind:class="{'dark': theme === 'dark' || (theme === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)}"
   x-resize.document="wide = $width > 820"
 >
@@ -155,12 +159,12 @@
 
               <!-- aphorisms -->
               <div class="p-1 text-sakura text-xs font-mono text-right">
-                <span x-show="rand <= 0.5">
+                <span x-show="quote === 0">
                   to our era of Algorithm—o abominable Machine—so dilligently
                   attending to our Attentions
                 </span>
 
-                <span x-show="rand > 0.5">
+                <span x-show="quote === 1">
                   of course,<br />says the preacher man.
                 </span>
               </div>

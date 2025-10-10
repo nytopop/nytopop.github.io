@@ -113,7 +113,7 @@
 
           <!-- TODO: fill w/ content from context -->
           <div
-            class="my-2 bg-child p-1 boxshadow-lg text-soft hyphens-auto text-justify"
+            class="my-1 bg-child p-1 boxshadow-lg text-soft hyphens-auto text-justify"
             x-text="lorem(48)"
           ></div>
         </div>
@@ -127,13 +127,13 @@
 
           <!-- config modal -->
           <div
-            class="flex flex-row my-2"
+            class="flex flex-row my-1"
             x-show="configmodal"
             x-transition
             x-cloak
           >
             <div
-              class="mr-0.5 flex-1 boxshadow-lg bg-child -z-1 relative max-h-full flex flex-col"
+              class="mr-0.5 flex-1 boxshadow-sm bg-child -z-1 relative max-h-full flex flex-col"
             >
               <!-- petal animation -->
               <div class="absolute sakura h-full w-full overflow-hidden">
@@ -154,16 +154,14 @@
               <div class="flex-grow"></div>
 
               <!-- aphorisms -->
-              <div
-                class="mb-1 mr-1 text-sakura text-xs font-mono text-right cursor-text"
-              >
+              <div class="p-1 text-sakura text-xs font-mono text-right">
                 <span x-show="rand <= 0.5">
-                  to our era of Algorithm—most abominable of Machines—so
-                  assiduously attending our Attentions
+                  to our era of Algorithm—o abominable Machine—so dilligently
+                  attending to our Attentions
                 </span>
 
                 <span x-show="rand > 0.5">
-                  of course it's true,<br />says the preacher man.
+                  of course,<br />says the preacher man.
                 </span>
               </div>
             </div>
@@ -304,7 +302,7 @@
 
               <!-- bottom list -->
               <ul
-                class="bg-child text-min text-right p-1 boxshadow-lg overflow-x-hidden font-mono"
+                class="bg-child text-min text-right p-1 boxshadow-sm overflow-x-hidden font-mono"
               >
                 <li class="m-1">
                   mkit ver
@@ -353,7 +351,7 @@
 
           <!-- TODO: fill w/ content from context -->
           <div
-            class="my-2 bg-child p-1 boxshadow-lg text-soft hyphens-auto text-justify"
+            class="my-1 bg-child p-1 boxshadow-lg text-soft hyphens-auto text-justify"
             x-text="lorem(16)"
           ></div>
         </div>
